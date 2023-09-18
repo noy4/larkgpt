@@ -7,6 +7,7 @@ const OPENAI_MODEL = 'gpt-3.5-turbo';
 const OPENAI_MAX_TOKENS = 256;
 const LARK_APP_ID = process.env.LARK_APP_ID;
 const LARK_APP_SECRET = process.env.LARK_APP_SECRET;
+const LARK_APP_NAME = process.env.LARK_APP_NAME;
 const EventDB = aircode.db.table('event');
 const MessageDB = aircode.db.table('message');
 
@@ -55,7 +56,7 @@ export default async function (params, context) {
   }
 
   // Check if the message is relevant to the bot's conversation
-  const mention = text.includes('@_user_1');
+  const mention = message.mentions?.[0].name === LARK_APP_NAME
   if (mention) react(messageId, 'MeMeMe');
   const messages = await MessageDB.where({ sessionId })
     .sort({ createdAt: 1 })
